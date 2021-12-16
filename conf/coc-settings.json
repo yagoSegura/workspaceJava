@@ -1,0 +1,9 @@
+{
+ "java.completion.enabled" : true,
+ "java.completion.guessMethodArguments" : true,
+ "java.format.enabled" : true,
+ "java.codeGeneration.generateComments" : true,
+ "java.saveActions.organizeImports" : true,
+"java.references.includeAccessors": true,
+"java.format.settings.url": "/home/vagrant/.config/coc/extensions/node_modules/redhat.java/eclipse-formatter.xml"
+}

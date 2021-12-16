@@ -1,0 +1,56 @@
+# Constants
+HOME="/home/vagrant"
+NVIM_CONFIG_FILE_PATH="$HOME/.config/nvim/init.vim"
+VIM_PLUG_PATH="$HOME/.local/share/nvim/site/autoload/plug.vim"
+USR_APP_FOLDER_PATH="/usr/app"
+JAVA_HOME_PATH="$USR_APP_FOLDER_PATH/java"
+JAVA_HOME_JDK_11_PATH="$JAVA_HOME_PATH/jdk-11"
+
+# installation of packages
+sudo apt-get update
+sudo apt-get -y install neovim git snap curl dos2unix
+
+# neovim
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+# application folder
+if [ ! -d "$USR_APP_FOLDER_PATH" ]; then
+	sudo mkdir $USR_APP_FOLDER_PATH
+	sudo chown -R vagrant:vagrant $USR_APP_FOLDER_PATH  
+	echo "Created $USR_APP_FOLDER_PATH folder"
+else
+	echo "$USR_APP_FOLDER_PATH folder already present"
+fi
+
+#java folder
+if [ ! -d "$JAVA_HOME_PATH" ]; then
+	sudo mkdir $JAVA_HOME_PATH
+	sudo chown -R vagrant:vagrant $JAVA_HOME_PATH
+	echo "Created $JAVA_HOME_PATH folder"
+else
+	echo "$JAVA_HOME_PATH folder already present"	
+fi
+
+# Download java jdk-11
+if [ ! -d "$JAVA_HOME_JDK_11_PATH" ]; then
+	wget --no-verbose -P $JAVA_HOME_PATH https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz
+	tar xzf $JAVA_HOME_PATH/openjdk-11+28_linux-x64_bin.tar.gz -C $JAVA_HOME_PATH
+	rm -rf $JAVA_HOME_PATH/openjdk-11+28_linux-x64_bin.tar.gz
+	echo 'export JAVA_HOME='$JAVA_HOME_JDK_11_PATH >> $HOME/.bashrc
+	echo 'export PATH=.:'$JAVA_HOME_JDK_11_PATH'/bin:'$PATH >> $HOME/.bashrc
+	echo "openjdk11 extracted in $JAVA_HOME_JDK_11_PATH"
+else
+	echo "$JAVA_HOME_JDK_11_PATH folder already present"
+fi
+
+# configuration files
+if [ ! -f "$NVIM_CONFIG_FILE_PATH" ]; then
+	echo "installing neovim configuration file (init.vim)"
+	mkdir .config
+	cd .config
+	mkdir nvim
+	cp $HOME/conf/init.vim $NVIM_CONFIG_FILE_PATH
+else
+	echo "configuration file (init.vim) already exists"
+fi
+
